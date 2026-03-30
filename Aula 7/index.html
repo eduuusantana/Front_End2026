@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Animal Virtual</title>
+
+    <style>
+        #container {
+            position: relative;
+            width: 500px;
+        }
+
+        #cria_normal, #cria_morto {
+            width: 500px;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        #cria_morto {
+            opacity: 0;
+        }
+
+        #btn-alimentar {
+            margin-top: 520px;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container">
+        <img id="cria_normal" src="animal.jpg">
+        <img id="cria_morto" src="animal_morto.png">
+    </div>
+
+    <button id="btn-alimentar">Alimentar</button>
+
+    <script src="script.js"></script>
+</body>
+</html>
