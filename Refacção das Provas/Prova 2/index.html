@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grupos da Copa e Fatos</title>
+    <style>
+        body {
+
+            background-color: #f0f4f8; 
+            font-family: Arial, sans-serif;
+            color: #333333;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+
+            text-align: center;
+            padding: 30px 20px;
+            background-color: #102a43;
+            color: #ffffff;
+            margin-bottom: 30px;
+        }
+
+        .container-grupos {
+
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            flex-wrap: wrap; 
+            gap: 25px; 
+            padding: 0 20px 20px 20px;
+        }
+
+        .cartao-grupo {
+
+            background-color: #ffffff;
+            border: 2px solid #d9e2ec;
+            border-radius: 12px;
+            padding: 25px;
+            width: 300px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05); 
+        }
+
+        .cartao-grupo h2 {
+
+            color: #1e5c96;
+            margin-top: 0;
+            border-bottom: 2px solid #f0f4f8;
+            padding-bottom: 10px;
+        }
+
+        .cartao-grupo h3 {
+
+            font-size: 16px;
+            color: #486581;
+        }
+
+        ul {
+
+            padding-left: 20px;
+            margin-bottom: 20px;
+        }
+
+        li {
+
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        details {
+
+            background-color: #e8f5e9;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #c8e6c9;
+            color: #2e7d32;
+        }
+
+        summary {
+
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        details p {
+
+            margin-top: 10px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        .container-botao {
+
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        button {
+
+            background-color: #1e5c96;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        button:hover {
+
+            background-color: #102a43;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Grupos e Fatos da Copa do Mundo FIFA 2026</h1>
+    </header>
+
+    <main class="container-grupos">
+        
+        <div id="cartao1" class="cartao-grupo">
+            <h2>🅰️ Grupo A</h2>
+            <h3>Seleções</h3>
+            <ul>
+                <li>México</li>
+                <li>África do Sul</li>
+                <li>Coreia do Sul</li>
+                <li>República Tcheca</li>
+            </ul>
+            <details>
+                <summary>Saiba Mais (Fatos)</summary>
+                <p>O jogo de abertura será México x África do Sul. Confrontos entre Coreia do Sul e seleções europeias já ocorreram em várias Copas, com histórico equilibrado.</p>
+            </details>
+        </div>
+
+        <div id="cartao2" class="cartao-grupo">
+            <h2>🅱️ Grupo B</h2>
+            <h3>Seleções</h3>
+            <ul>
+                <li>Canadá</li>
+                <li>Suíça</li>
+                <li>Catar</li>
+                <li>Vaga Europeia (Bósnia)</li>
+            </ul>
+            <details>
+                <summary>Saiba Mais (Fatos)</summary>
+                <p>O Canadá joga em casa, fator importante de desempenho. Catar e Suíça já se enfrentaram recentemente em amistosos internacionais.</p>
+            </details>
+        </div>
+
+        <div id="cartao3" class="cartao-grupo">
+            <h2>🅲 Grupo C</h2>
+            <h3>Seleções</h3>
+            <ul>
+                <li>Brasil</li>
+                <li>Marrocos</li>
+                <li>Haiti</li>
+                <li>Escócia</li>
+            </ul>
+            <details>
+                <summary>Saiba Mais (Fatos)</summary>
+                <p>Brasil, Marrocos e Escócia já dividiram grupo em 1998. Brasil nunca perdeu para a Escócia em Copas.</p>
+            </details>
+        </div>
+
+    </main>
+
+    <div class="container-botao">
+        <button onclick="proximosGrupos()">Próximo</button>
+    </div>
+
+    <script>
+        function proximosGrupos() {
+            const cartao1 = document.getElementById('cartao1');
+            const cartao2 = document.getElementById('cartao2');
+            const cartao3 = document.getElementById('cartao3');
+
+            cartao1.innerHTML = `
+                <h2>🅳 Grupo D</h2>
+                <h3>Seleções</h3>
+                <ul>
+                    <li>Estados Unidos</li>
+                    <li>Paraguai</li>
+                    <li>Austrália</li>
+                    <li>Turquia</li>
+                </ul>
+                <details>
+                    <summary>Saiba Mais (Fatos)</summary>
+                    <p>Os EUA jogam em casa, vantagem histórica em Copas. Austrália enfrenta frequentemente seleções sul-americanas em torneios.</p>
+                </details>
+            `;
+
+            cartao2.innerHTML = `
+                <h2>🅴 Grupo E</h2>
+                <h3>Seleções</h3>
+                <ul>
+                    <li>Alemanha</li>
+                    <li>Equador</li>
+                    <li>Costa do Marfin</li>
+                    <li>Curaçao</li>
+                </ul>
+                <details>
+                    <summary>Saiba Mais (Fatos)</summary>
+                    <p>Alemanha costuma dominar fases de grupos. Equador e Costa do Marfim têm estilos físicos semelhantes.</p>
+                </details>
+            `;
+
+            cartao3.innerHTML = `
+                <h2>🅵 Grupo F</h2>
+                <h3>Seleções</h3>
+                <ul>
+                    <li>Holanda</li>
+                    <li>Japão</li>
+                    <li>Tunísia</li>
+                    <li>Suécia</li>
+                </ul>
+                <details>
+                    <summary>Saiba Mais (Fatos)</summary>
+                    <p>Brasil, Marrocos e Escócia já dividiram grupo em 1998. Brasil nunca perdeu para a Escócia em Copas.</p>
+                </details>
+            `;
+        }
+    </script>
+
+</body>
+</html>
