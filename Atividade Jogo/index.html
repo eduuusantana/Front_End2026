@@ -3,346 +3,319 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Aprenda React Criando Jogos Clássicos</title>
-
+<title>Clone um Web Game de Palavras com React</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,700&family=DM+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-:root{
-    --bg:#1b1b1b;
-    --surface:#252526;
-    --surface2:#2d2d30;
-    --border:#3e3e42;
-    --text:#ffffff;
-    --muted:#b0b0b0;
-    --accent:#569cd6;
-    --success:#6a9955;
-    --warning:#d7ba7d;
-}
+  :root {
+    --bg:      #1c1c1c;
+    --surface: #2a2a2a;
+    --border:  #3d3d3d;
+    --text:    #f0f0ed;
+    --muted:   #9b9994;
+    --accent:  #f0c419;
+    --mono:    'DM Mono', monospace;
+    --serif:   'Fraunces', serif;
+    --sans:    'Plus Jakarta Sans', sans-serif;
+  }
 
-body{
-    font-family:"Segoe UI",Tahoma,Geneva,Verdana,sans-serif;
-    background:var(--bg);
-    color:var(--text);
-    line-height:1.7;
-}
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.65;
+  }
 
-nav{
-    position:sticky;
-    top:0;
-    background:var(--surface);
-    border-bottom:1px solid var(--border);
-    padding:16px 40px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-}
+  /* NAV */
+  nav {
+    position: sticky; top: 0; z-index: 10;
+    background: rgba(28,28,28,.95);
+    border-bottom: 1px solid var(--border);
+    padding: 0 1.5rem;
+    display: flex; align-items: center; gap: 1.5rem;
+    height: 52px;
+  }
+  .nav-logo {
+    font-family: var(--serif); font-size: 17px;
+    color: var(--accent); font-weight: 700; text-decoration: none;
+  }
+  .nav-links { display: flex; gap: 1.25rem; margin-left: auto; }
+  .nav-links a { font-size: 13px; color: var(--muted); text-decoration: none; }
+  .nav-links a:hover { color: var(--text); }
 
-.logo{
-    color:var(--accent);
-    font-weight:700;
-    font-size:20px;
-}
+  /* HERO */
+  .hero { max-width: 760px; margin: 0 auto; padding: 3.5rem 1.5rem 2.5rem; }
+  .hero-eyebrow {
+    font-family: var(--mono); font-size: 11px; letter-spacing: .1em;
+    color: var(--accent); text-transform: uppercase; margin-bottom: 1rem;
+  }
+  .hero h1 {
+    font-family: var(--serif); font-size: clamp(2rem, 5vw, 2.8rem);
+    font-weight: 300; line-height: 1.15; margin-bottom: 1rem;
+  }
+  .hero h1 em { font-style: italic; color: var(--accent); }
+  .hero-lead { color: var(--muted); max-width: 480px; }
 
-nav ul{
-    display:flex;
-    gap:20px;
-    list-style:none;
-}
+  hr.divider { border: none; border-top: 1px solid var(--border); margin: 0 1.5rem; }
 
-nav a{
-    text-decoration:none;
-    color:var(--muted);
-}
+  /* GAME SELECTOR */
+  .section { max-width: 760px; margin: 0 auto; padding: 2.5rem 1.5rem; }
+  .section-label {
+    font-family: var(--mono); font-size: 11px; color: var(--muted);
+    letter-spacing: .08em; text-transform: uppercase; margin-bottom: 1rem;
+  }
+  .game-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 2.5rem; }
+  .game-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 1rem; text-align: left; cursor: pointer;
+  }
+  .game-card:hover { border-color: var(--muted); }
+  .game-card.active { border-color: var(--accent); background: #2e2a16; }
+  .game-icon { font-size: 22px; margin-bottom: .5rem; }
+  .game-name { font-weight: 600; margin-bottom: .25rem; }
+  .game-desc { font-size: 12px; color: var(--muted); }
 
-nav a:hover{
-    color:white;
-}
+  /* STEPS */
+  .step { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin-bottom: 8px; }
+  .step-header {
+    display: flex; align-items: center; gap: 12px;
+    padding: .85rem 1.1rem; cursor: pointer; background: var(--surface);
+    list-style: none;
+  }
+  .step-header:hover { background: #303030; }
+  .step-num {
+    width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--mono); font-size: 11px; font-weight: 500;
+    background: #3a330f; color: var(--accent);
+  }
+  .step-title { font-size: 14px; font-weight: 500; flex: 1; }
+  .step-toggle { font-family: var(--mono); color: var(--muted); transition: transform .2s; }
+  details[open] .step-toggle { transform: rotate(45deg); }
+  .step-body { padding: 1rem 1.25rem 1.25rem; border-top: 1px solid var(--border); }
+  .step-body p { font-size: 13.5px; color: var(--muted); margin-bottom: .85rem; }
+  .step-body ul { margin: 0 0 .85rem 1.1rem; }
+  .step-body li { font-size: 13px; color: var(--muted); margin-bottom: .15rem; }
+  .step-body strong { color: var(--text); font-weight: 500; }
 
-.hero{
-    max-width:1000px;
-    margin:auto;
-    padding:80px 24px;
-}
+  /* CODE */
+  pre {
+    background: #232323; border: 1px solid var(--border);
+    border-radius: 6px; padding: 1rem; overflow-x: auto; margin: .6rem 0;
+    font-family: var(--mono); font-size: 12.5px; line-height: 1.7; color: var(--text);
+  }
+  .kw { color: var(--accent); }
+  .str { color: #d8d3c0; }
+  .cm  { color: #6b6b6b; font-style: italic; }
 
-.hero h1{
-    font-size:3rem;
-    margin-bottom:20px;
-}
+  .tip {
+    background: #2e2a16; border-left: 3px solid var(--accent);
+    border-radius: 0 6px 6px 0; padding: .75rem 1rem; margin: .6rem 0;
+  }
+  .tip p { color: #d9c98e !important; font-size: 12.5px !important; margin: 0 !important; }
+  .tip strong { color: var(--accent) !important; }
 
-.hero p{
-    color:var(--muted);
-    max-width:700px;
-}
+  .game-content { display: none; }
+  .game-content.active { display: block; }
 
-.badges{
-    margin-top:20px;
-    display:flex;
-    flex-wrap:wrap;
-    gap:10px;
-}
+  footer {
+    border-top: 1px solid var(--border); padding: 1.5rem; text-align: center;
+    font-family: var(--mono); font-size: 12px; color: var(--muted);
+  }
+  footer a { color: var(--accent); text-decoration: none; }
 
-.badge{
-    background:var(--surface2);
-    border:1px solid var(--border);
-    padding:6px 12px;
-    border-radius:6px;
-}
-
-.section{
-    max-width:1000px;
-    margin:auto;
-    padding:20px 24px 60px;
-}
-
-.games{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-    gap:20px;
-}
-
-.card{
-    background:var(--surface);
-    border:1px solid var(--border);
-    border-radius:12px;
-    padding:24px;
-    cursor:pointer;
-}
-
-.card:hover{
-    border-color:var(--accent);
-}
-
-.card h3{
-    margin-bottom:10px;
-}
-
-.card p{
-    color:var(--muted);
-}
-
-.content{
-    display:none;
-    margin-top:30px;
-}
-
-.content.active{
-    display:block;
-}
-
-details{
-    margin-bottom:12px;
-    background:var(--surface);
-    border:1px solid var(--border);
-    border-radius:10px;
-    overflow:hidden;
-}
-
-summary{
-    padding:16px;
-    cursor:pointer;
-    font-weight:600;
-}
-
-.details-body{
-    padding:20px;
-    border-top:1px solid var(--border);
-}
-
-pre{
-    background:var(--surface2);
-    border:1px solid var(--border);
-    padding:15px;
-    border-radius:8px;
-    overflow:auto;
-    margin-top:10px;
-}
-
-footer{
-    text-align:center;
-    padding:30px;
-    border-top:1px solid var(--border);
-    color:var(--muted);
-}
-
-@media(max-width:700px){
-    .hero h1{
-        font-size:2rem;
-    }
-
-    nav{
-        flex-direction:column;
-        gap:10px;
-    }
-}
+  @media (max-width: 600px) {
+    .game-grid { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+  }
 </style>
 </head>
-
 <body>
 
 <nav>
-    <div class="logo">React + Jogos</div>
-
-    <ul>
-        <li><a href="#inicio">Início</a></li>
-        <li><a href="#tutorial">Tutoriais</a></li>
-    </ul>
+  <a class="nav-logo" href="#">react + games</a>
+  <div class="nav-links">
+    <a href="#">Termo</a>
+    <a href="#">Contexto</a>
+    <a href="#">Conexo</a>
+  </div>
 </nav>
 
-<section class="hero" id="inicio">
-    <h1>Aprenda React Desenvolvendo Jogos Clássicos</h1>
-
-    <p>
-        Projeto acadêmico inspirado no tutorial oficial do React.
-        Aprenda componentes, useState, eventos, props e renderização
-        dinâmica criando dois jogos clássicos: Jogo da Velha e Forca.
-    </p>
-
-    <div class="badges">
-        <span class="badge">React</span>
-        <span class="badge">useState</span>
-        <span class="badge">Props</span>
-        <span class="badge">Eventos</span>
-        <span class="badge">Componentes</span>
-    </div>
+<section class="hero">
+  <p class="hero-eyebrow">tutorial react</p>
+  <h1>Clone um <em>web game</em><br>de palavras</h1>
+  <p class="hero-lead">Aprenda React construindo jogos reais — Termo, Contexto e Conexo.</p>
 </section>
 
-<section class="section" id="tutorial">
+<hr class="divider">
 
-<h2 style="margin-bottom:20px">Escolha um Tutorial</h2>
+<section class="section">
+  <p class="section-label">escolha o jogo</p>
 
-<div class="games">
+  <div class="game-grid">
+    <button class="game-card active" onclick="selectGame('termo')">
+      <div class="game-icon">🟨</div>
+      <div class="game-name">Termo</div>
+      <div class="game-desc">Adivinhe a palavra em 6 tentativas.</div>
+    </button>
+    <button class="game-card" onclick="selectGame('contexto')">
+      <div class="game-icon">📍</div>
+      <div class="game-name">Contexto</div>
+      <div class="game-desc">Encontre a palavra pela similaridade.</div>
+    </button>
+    <button class="game-card" onclick="selectGame('conexo')">
+      <div class="game-icon">🔗</div>
+      <div class="game-name">Conexo</div>
+      <div class="game-desc">Agrupe 16 palavras em 4 categorias.</div>
+    </button>
+  </div>
 
-<div class="card" onclick="showTutorial('velha')">
-    <h3>🎮 Jogo da Velha</h3>
-    <p>Aprenda estados, componentes e lógica de vitória.</p>
-</div>
+  <!-- TERMO -->
+  <div id="content-termo" class="game-content active">
+    <div class="step-list">
 
-<div class="card" onclick="showTutorial('forca')">
-    <h3>🔤 Forca</h3>
-    <p>Aprenda manipulação de strings, eventos e renderização dinâmica.</p>
-</div>
+      <details class="step" open>
+        <summary class="step-header">
+          <div class="step-num">1</div>
+          <span class="step-title">Decomponha em componentes</span>
+          <span class="step-toggle">+</span>
+        </summary>
+        <div class="step-body">
+          <p>Quebre a tela em componentes reutilizáveis:</p>
+          <ul>
+            <li><strong>Grid</strong> — o tabuleiro (6 linhas × 5 letras)</li>
+            <li><strong>Tile</strong> — cada quadradinho com cor de feedback</li>
+            <li><strong>Keyboard</strong> — teclado virtual</li>
+          </ul>
+          <div class="tip"><p><strong>Regra:</strong> se algo se repete na tela, é um componente.</p></div>
+        </div>
+      </details>
 
-</div>
+      <details class="step">
+        <summary class="step-header">
+          <div class="step-num">2</div>
+          <span class="step-title">Estado central com useState</span>
+          <span class="step-toggle">+</span>
+        </summary>
+        <div class="step-body">
+          <p>Toda a lógica do jogo fica num custom hook:</p>
+          <pre><code><span class="kw">const</span> [guesses, setGuesses] = useState([])
+<span class="kw">const</span> [current, setCurrent] = useState(<span class="str">''</span>)
 
-<div id="velha" class="content active">
+<span class="kw">function</span> submitGuess() {
+  <span class="kw">if</span> (current.length !== 5) <span class="kw">return</span>
+  setGuesses([...guesses, current])
+  setCurrent(<span class="str">''</span>)
+}</code></pre>
+        </div>
+      </details>
 
-<h2 style="margin:30px 0">Tutorial - Jogo da Velha</h2>
+      <details class="step">
+        <summary class="step-header">
+          <div class="step-num">3</div>
+          <span class="step-title">Tile recebe cor via props</span>
+          <span class="step-toggle">+</span>
+        </summary>
+        <div class="step-body">
+          <p>O Tile é puro — só exibe o que recebe:</p>
+          <pre><code><span class="kw">function</span> Tile({ letter, status }) {
+  <span class="kw">return</span> &lt;div className={<span class="str">`tile tile--${status}`</span>}&gt;{letter}&lt;/div&gt;
+}</code></pre>
+        </div>
+      </details>
 
-<details open>
-<summary>1. Criando o Projeto</summary>
-<div class="details-body">
-<p>Crie o projeto usando Vite:</p>
-<pre>npm create vite@latest jogo-da-velha -- --template react
-cd jogo-da-velha
-npm install
-npm run dev</pre>
-</div>
-</details>
+    </div>
+  </div>
 
-<details>
-<summary>2. Estrutura de Componentes</summary>
-<div class="details-body">
-<ul>
-<li>App.jsx</li>
-<li>Board.jsx</li>
-<li>Square.jsx</li>
-</ul>
-</div>
-</details>
+  <!-- CONTEXTO -->
+  <div id="content-contexto" class="game-content">
+    <div class="step-list">
 
-<details>
-<summary>3. Estado com useState</summary>
-<div class="details-body">
-<pre>const [squares, setSquares] = useState(Array(9).fill(null));</pre>
-</div>
-</details>
+      <details class="step" open>
+        <summary class="step-header">
+          <div class="step-num">1</div>
+          <span class="step-title">Sem limite de tentativas</span>
+          <span class="step-toggle">+</span>
+        </summary>
+        <div class="step-body">
+          <p>O jogador digita palavras e recebe uma distância semântica — quanto menor, mais perto da resposta. As tentativas ficam ordenadas por proximidade.</p>
+        </div>
+      </details>
 
-<details>
-<summary>4. Verificando Vitória</summary>
-<div class="details-body">
-<pre>const lines = [
-[0,1,2],
-[3,4,5],
-[6,7,8],
-[0,3,6],
-[1,4,7],
-[2,5,8],
-[0,4,8],
-[2,4,6]
-];</pre>
-</div>
-</details>
+      <details class="step">
+        <summary class="step-header">
+          <div class="step-num">2</div>
+          <span class="step-title">Buscar a distância com fetch</span>
+          <span class="step-toggle">+</span>
+        </summary>
+        <div class="step-body">
+          <pre><code><span class="kw">async function</span> handleGuess() {
+  <span class="kw">const</span> res = <span class="kw">await</span> fetch(<span class="str">`/api/tip/${input}`</span>)
+  <span class="kw">const</span> data = <span class="kw">await</span> res.json()
+  setGuesses(g => [...g, data].sort((a,b) => a.distance - b.distance))
+}</code></pre>
+        </div>
+      </details>
 
-</div>
+    </div>
+  </div>
 
-<div id="forca" class="content">
+  <!-- CONEXO -->
+  <div id="content-conexo" class="game-content">
+    <div class="step-list">
 
-<h2 style="margin:30px 0">Tutorial - Forca</h2>
+      <details class="step" open>
+        <summary class="step-header">
+          <div class="step-num">1</div>
+          <span class="step-title">Estado complexo → useReducer</span>
+          <span class="step-toggle">+</span>
+        </summary>
+        <div class="step-body">
+          <p>16 palavras formam 4 grupos secretos. O jogador seleciona 4 por vez. Quando várias partes do estado mudam juntas, useReducer organiza melhor que vários useState.</p>
+          <div class="tip"><p><strong>Regra:</strong> ação única, várias mudanças de estado → useReducer.</p></div>
+        </div>
+      </details>
 
-<details open>
-<summary>1. Estrutura Inicial</summary>
-<div class="details-body">
-<p>Defina uma palavra secreta e um estado para letras digitadas.</p>
-</div>
-</details>
+      <details class="step">
+        <summary class="step-header">
+          <div class="step-num">2</div>
+          <span class="step-title">Verificando o grupo no reducer</span>
+          <span class="step-toggle">+</span>
+        </summary>
+        <div class="step-body">
+          <pre><code><span class="kw">function</span> handleSubmit(state) {
+  <span class="kw">const</span> ids = state.selected.map(w => w.groupId)
+  <span class="kw">const</span> acertou = ids.every(id => id === ids[0])
+  <span class="kw">return</span> acertou
+    ? { ...state, solved: [...state.solved, ids[0]], selected: [] }
+    : { ...state, mistakes: state.mistakes + 1, selected: [] }
+}</code></pre>
+        </div>
+      </details>
 
-<details>
-<summary>2. Estado das Letras</summary>
-<div class="details-body">
-<pre>const [guesses, setGuesses] = useState([]);</pre>
-</div>
-</details>
-
-<details>
-<summary>3. Captura do Teclado</summary>
-<div class="details-body">
-<pre>useEffect(() => {
-window.addEventListener('keydown', handleKey);
-return () => window.removeEventListener('keydown', handleKey);
-}, []);</pre>
-</div>
-</details>
-
-<details>
-<summary>4. Mostrar Palavra</summary>
-<div class="details-body">
-<pre>word.split('').map(letter =>
-guesses.includes(letter) ? letter : '_'
-)</pre>
-</div>
-</details>
-
-<details>
-<summary>5. Condição de Vitória</summary>
-<div class="details-body">
-<pre>const won = word
-.split('')
-.every(letter => guesses.includes(letter));</pre>
-</div>
-</details>
-
-</div>
+    </div>
+  </div>
 
 </section>
 
 <footer>
-Projeto acadêmico de Front-End • Engenharia de Software
+  baseado no tutorial <a href="https://react.dev/learn/tutorial-tic-tac-toe" target="_blank">React.dev</a>
 </footer>
 
 <script>
-function showTutorial(id){
-
-document.querySelectorAll('.content')
-.forEach(el => el.classList.remove('active'));
-
-document.getElementById(id)
-.classList.add('active');
-}
+  function selectGame(game) {
+    var games = ['termo', 'contexto', 'conexo'];
+    document.querySelectorAll('.game-card').forEach(function (card, i) {
+      card.classList.toggle('active', games[i] === game);
+    });
+    document.querySelectorAll('.game-content').forEach(function (el) {
+      el.classList.remove('active');
+    });
+    document.getElementById('content-' + game).classList.add('active');
+  }
 </script>
 
 </body>
